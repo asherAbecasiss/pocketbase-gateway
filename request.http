@@ -2,26 +2,17 @@
 
 
 
-#user1
+
 
 POST http://localhost:8090/api/collections/users/auth-with-password
 content-type: application/json
 
-{"identity":"aa@cc.com","password":"1234567890"}
+{"identity":"test@test.com","password":"pass"}
 
 ###
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MjYzMDY2NDEsImlkIjoiNXdlOHhwNGlkd2V3bnB1IiwidHlwZSI6ImF1dGhSZWNvcmQifQ.c-kAqK2q6gYZ4tgZA2cBA9dzwhmrsI0MbJgMZI4-IGc
+@token = xxx
 
-
-###
-
-@token2= eyJhb2GciOiJIUzI1sNiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MjYyMjk2NjAsImlkIjoiMTg0aXFxNXl0Y2JkbjdwIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.QeY-fPuABtxzzu43saFNpM94saRcyIg4aTwX_RMzNhk
-
-
-###
-@token3=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MjYyMjc3NjIsImlkIjoiMTg0aXFxNXl0Y2JkbjdwIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.emqIP3AnwGUGG2q9k5UPB981l2phAfxDv1HqgikKIQs
-###
-GET http://localhost:8090/api/v1/hello/2sss
+GET http://localhost:8090/api/v1/hello/1
 Authorization:  {{token}}
 
 
@@ -29,7 +20,7 @@ Authorization:  {{token}}
 ###
 
 GET http://localhost:8090/api/v2/hello
-Authorization:  {{token2}}
+Authorization:  {{token}}
 
 ###
 GET http://localhost:8090/api/v1/hello

@@ -13,12 +13,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Config struct {
-	Name    string   `yaml:"name"`
-	Age     int      `yaml:"age"`
-	Hobbies []string `yaml:"hobbies"`
-}
-
 type Api struct {
 	App       *pocketbase.PocketBase
 	SecretKey string
