@@ -1,0 +1,35 @@
+_format_version: "3.0"
+_transform: true
+
+
+rate_limiter_memory_store:
+  rate: 10
+  burst: 30
+  expires_in: 3m
+  blacklist_ips:
+    - "192.168.1.1"
+    - "10.0.0.5"
+    - "172.16.0.3"
+
+
+services:
+- host: localhost
+  name: example_service
+  port: 8080
+  protocol: http
+  premession: require_record_auth
+  routes:
+  - name: example_route
+    paths: /v1/*
+
+- host: localhost
+  name: example_service
+  port: 8081
+  protocol: http
+  premession: require_record_auth
+  routes:
+  - name: example_route
+    paths: /v2/*
+
+
+
