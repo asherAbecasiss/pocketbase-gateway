@@ -3,9 +3,9 @@ module apiGateway
 go 1.22.6
 
 require (
+	github.com/elazarl/goproxy v0.0.0-20240726154733-8b0c20506380
 	github.com/labstack/echo/v5 v5.0.0-20230722203903-ec5b858dab61
 	github.com/pocketbase/pocketbase v0.22.20
-	golang.org/x/exp v0.0.0-20231108232855-2478ac86f678
 	gopkg.in/yaml.v2 v2.4.0
 )
 

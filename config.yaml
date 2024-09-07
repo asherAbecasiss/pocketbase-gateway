@@ -20,16 +20,16 @@ services:
   premession: require_record_auth
   routes:
   - name: example_route
-    paths: /v1/*
+    paths: /users
 
 - host: localhost
   name: example_service
   port: 8081
   protocol: http
-  premession: require_record_auth
+
   routes:
   - name: example_route
-    paths: /v2/*
+    paths: /a1
 
 
 

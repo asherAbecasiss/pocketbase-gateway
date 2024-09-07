@@ -15,11 +15,19 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
+func (a *Api) reverseProxy(target string) echo.HandlerFunc {
+	targetURL, _ := url.Parse(target)
+	proxy := httputil.NewSingleHostReverseProxy(targetURL)
+
+	return func(c echo.Context) error {
+		proxy.ServeHTTP(c.Response(), c.Request())
+		return nil
+	}
+}
+
 func (a *Api) InitRouting(publicDirFlag string) {
 
 	a.App.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-
-
 
 		config := middleware.RateLimiterConfig{
 			Skipper: middleware.DefaultSkipper,
@@ -40,7 +48,6 @@ func (a *Api) InitRouting(publicDirFlag string) {
 				return context.JSON(http.StatusForbidden, nil)
 			},
 			DenyHandler: func(context echo.Context, identifier string, err error) error {
-
 
 				a.App.Logger().Warn("DenyHandler for host " + identifier)
 				return context.JSON(http.StatusTooManyRequests, nil)
@@ -70,31 +77,16 @@ func (a *Api) InitRouting(publicDirFlag string) {
 			},
 		}))
 
-		api := e.Router.Group("/api")
+		for _, service := range a.Config.Services {
+			target := fmt.Sprintf("%s://%s:%s", service.Protocol, service.Host, service.Port)
 
-		all_methods := []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"}
-
-		for _, v := range a.Config.Services {
-
-			for _, r := range v.Routes {
-				targetServices, err := url.Parse(v.Protocol + "://" + v.Host + ":" + v.Port)
-				if err != nil {
-					break
-				}
-				api.Match(all_methods, r.Paths, func(c echo.Context) error {
-
-					proxy := httputil.NewSingleHostReverseProxy(targetServices)
-					c.Request().Header.Add("x-api-key", "secret")
-
-					proxy.ServeHTTP(c.Response(), c.Request())
-					return nil
-				}, v.GetPremessionType())
-
+			for _, route := range service.Routes {
+				e.Router.Any(route.Paths, a.reverseProxy(target), service.GetPremessionType())
+				fmt.Printf("Proxying path %s to %s\n", route.Paths, target)
 			}
 
 		}
 
-		// serves static files from the provided public dir (if exists)
 		e.Router.GET("/*", apis.StaticDirectoryHandler(os.DirFS(publicDirFlag), true))
 
 		return nil
